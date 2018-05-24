@@ -1,0 +1,163 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Tic-Tac-Toe</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Merriweather:400i|Sansita:400i" rel="stylesheet">
+  <link rel="stylesheet" href="css/stylesheet.css">
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="text-center pb-4">Tic-Tac-Toe</h1>
+
+    <div id="score" class="row">
+      <div id="scorePlayerOne" class="player-score col-8 col-md-4 col-lg-3">
+        <i class="fas fa-times"></i>
+        <div id="scorePlayerOneName"></div>
+        <div id="scorePlayerOneScore" class="score-number">-</div>
+      </div>
+      <div id="scorePlayerTwo" class="player-score col-8 col-md-4 col-lg-3">
+        <i class="far fa-circle text-center"></i>
+        <div id="scorePlayerTwoName"></div>
+        <div id="scorePlayerTwoScore" class="score-number">-</div>
+      </div>
+    </div>
+
+    <h4 id="playerTurnInfo" class="text-center"></h4>
+
+    <div id="gameboard" class="col-11 col-sm-9 col-md-7 col-lg-5 row mx-auto">
+
+    </div>
+
+    <!-- Button trigger modal -->
+    <div class="text-center pt-5">
+      <div id="buttonGroup" class="button-group">
+        <button id="btnStartGame" type="button" class="btn btn-success" data-toggle="modal" onclick="Game.addEventToMenu();"data-target="#mainMenuModal">
+          Start Game
+        </button>
+        <div id="arrowTip" class="arrow-tip text-center d-none d-md-inline-block">
+          <div class="arrow-text">Start a new game!</div>
+          <img src="images/arrow.png" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="mainMenuModal" tabindex="-1" role="dialog" aria-labelledby="mainMenuModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Select game mode</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form>
+            <ul class="nav nav-tabs main-menu-nav">
+              <li class="nav-item">
+                <div id="mode1" class="nav-link active">Player 1 vs AI</div>
+              </li>
+              <li class="nav-item">
+                <div id="mode2" class="nav-link">Player 1 vs Player 2</div>
+              </li>
+            </ul>
+
+            <div id="mode1SelectedContainer">
+              <div class="menu-body">
+                <div class="form-group">
+                  <label for="inputPlayerOneNameMode1">Player 1</label>
+                  <input type="text" class="form-control" id="inputPlayerOneNameMode1" aria-describedby="playerOneNameHelp" placeholder="Enter name">
+                  <div class="input-error" id="inputPlayerOneErrorMode1"></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="Game.validateFormMode1();">Start Game</button>
+              </div>
+            </div>
+
+            <div id="mode2SelectedContainer">
+              <div class="menu-body">
+                <div class="form-group">
+                  <label for="inputPlayerOneName">Player 1</label>
+                  <input type="text" class="form-control" id="inputPlayerOneName" aria-describedby="playerOneNameHelp" placeholder="Enter name">
+                  <div class="input-error" id="inputPlayerOneError"></div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPlayerTwoName">Player 2</label>
+                  <input type="text" class="form-control" id="inputPlayerTwoName" aria-describedby="playerTwoNameHelp" placeholder="Enter name">
+                  <div class="input-error" id="inputPlayerTwoError"></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="Game.validateFormMode2();">Start Game</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="endGameModal" tabindex="-1" role="dialog" aria-labelledby="endGameModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="endGameModalTitle"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="end-modal__body modal-body">
+            <div id="modalResult"></div>
+            <i id="winLogo"></i>
+            <div class="row">
+              <div id="modalPlayerOneScore" class="col-12 col-md-4"></div>
+              <div id="modalTieScore" class="col-12 col-md-4"></div>
+              <div id="modalPlayerTwoScore" class="col-12 col-md-4"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" onclick="Game.continueGame();" data-dismiss="modal">Start another game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="container">
+    <div>Coded by <a href="http://pacific-tor-56437.herokuapp.com/">Alexis Robillart</a> (<a href="#">source code</a>) ©2018</div>
+    <div>Powered by Javascript</div>
+    <div>Created for <a href="https://www.theodinproject.com/lessons/tic-tac-toe-javascript">Project: Tic Tac Toe | The Odin Project</a></div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+    crossorigin="anonymous"></script>
+  <script src="js/scripts.js"></script>
+
+</body>
+
+</html>
